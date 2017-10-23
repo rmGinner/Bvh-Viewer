@@ -1,0 +1,19 @@
+# depslib dependency file v1.0
+1508530091 source:/home/10049190/bvhviewer/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<windows.h>
+	"gl/glut.h"
+	<GLUT/glut.h>
+	<GL/glut.h>
+
+1508532533 source:/home/10049190/bvhviewer-base/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<windows.h>
+	"gl/glut.h"
+	<GLUT/glut.h>
+	<GL/glut.h>
+
