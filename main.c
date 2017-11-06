@@ -54,6 +54,7 @@ void freeNode(Node* node);
 
 //custom home work
 void convertToTreeStructure();
+void readFrames();
 
 // Variaveis globais para manipulacao da visualizacao 3D
 int width,height;
@@ -82,18 +83,42 @@ void convertToTreeStructure()
     fscanf(file," %s ", buffer);
 
     char nodeName[20];
-    createNode(strcpy(nodeName,buffer), NULL, )
+    //createNode(strcpy(nodeName,buffer), NULL);
 
 
     printf("%s\n",buffer);
 
     printf("%s\n",buffer);
-
-
-
 
 }
 
+void readFrames() {
+    FILE *file = fopen("bvh/Male1_A1_Stand.bvh", "r");
+    if(file == NULL){
+        return NULL;
+    }
+    int linhaSize = 1000;
+    char linha[linhaSize];
+    int frames;
+    float frameTime;
+
+    ///PULA HIERARQUIA:
+    while(strncmp(fgets(linha, linhaSize, file), "MOTION", 6)  != 0) {
+        //printf(linha);
+    }
+    ///PULA NUMERO DE FRAMES E FRAM TIME:
+    fgets(linha, linhaSize, file);
+    fgets(linha, linhaSize, file);
+    //fscanf(file, "%d", &frames);
+    //fscanf(file, "%f", &frameTime);
+
+    ///LE FRAMES:
+
+
+
+    fclose(file);
+
+}
 
 
 
@@ -207,6 +232,7 @@ void initMaleSkel()
     Node* rToe2 = createNode("RToe2", rToe, 3, -0.131328, -1.35082, 5.13018, 0);
 
     apply();
+    readFrames();
 }
 
 float orange[] = { 1, 0.5, 0 };
