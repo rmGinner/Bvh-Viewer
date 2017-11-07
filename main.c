@@ -92,6 +92,10 @@ void convertToTreeStructure()
 
 }
 
+
+
+float dados[1000][1000];
+
 void readFrames() {
     FILE *file = fopen("bvh/Male1_A1_Stand.bvh", "r");
     if(file == NULL){
@@ -113,12 +117,22 @@ void readFrames() {
     //fscanf(file, "%f", &frameTime);
 
     ///LE FRAMES:
+    float aux;
+    for(int i=0; i<187; i++) {
+        while(fscanf(file, "%f", &aux) != EOF) {
+            ///Aqui os dados dos frames devem ser colocados na matriz 'dados',
+            ///onde cada linha do arquivo é uma linha da matriz de floats.
+        }
+    }
 
-
-
+    ///Aqui a matriz dados deve ser enviada para função apllyData modificada
+    ///(Ou enviar linha por linha da matriz, através de um array, para a apllyData atual).
     fclose(file);
-
 }
+
+
+
+
 
 
 
