@@ -94,48 +94,6 @@ void convertToTreeStructure()
 
 
 
-float dados[1000][1000];
-
-void readFrames() {
-    FILE *file = fopen("bvh/Male1_A1_Stand.bvh", "r");
-    if(file == NULL){
-        return NULL;
-    }
-    int linhaSize = 1000;
-    char linha[linhaSize];
-    int frames;
-    float frameTime;
-
-    ///PULA HIERARQUIA:
-    while(strncmp(fgets(linha, linhaSize, file), "MOTION", 6)  != 0) {
-        //printf(linha);
-    }
-    ///PULA NUMERO DE FRAMES E FRAM TIME:
-    fgets(linha, linhaSize, file);
-    fgets(linha, linhaSize, file);
-    //fscanf(file, "%d", &frames);
-    //fscanf(file, "%f", &frameTime);
-
-    ///LE FRAMES:
-    float aux;
-    for(int i=0; i<187; i++) {
-        while(fscanf(file, "%f", &aux) != EOF) {
-            ///Aqui os dados dos frames devem ser colocados na matriz 'dados',
-            ///onde cada linha do arquivo é uma linha da matriz de floats.
-        }
-    }
-
-    ///Aqui a matriz dados deve ser enviada para função apllyData modificada
-    ///(Ou enviar linha por linha da matriz, através de um array, para a apllyData atual).
-    fclose(file);
-}
-
-
-
-
-
-
-
 // **********************************************************************
 //  Cria um nodo novo para a hierarquia, fazendo também a ligacao com
 //  o seu pai (se houver)
@@ -245,9 +203,13 @@ void initMaleSkel()
     Node* rToe = createNode("RToe", rFoot, 3, -0.0828122, -6.13587, 12.8035, 1);
     Node* rToe2 = createNode("RToe2", rToe, 3, -0.131328, -1.35082, 5.13018, 0);
 
-    apply();
+    //apply();
     readFrames();
 }
+
+
+
+
 
 float orange[] = { 1, 0.5, 0 };
 float yellow[] = { 1, 1, 0 };
@@ -567,7 +529,7 @@ void arrow_keys ( int a_keys, int x, int y )
     case GLUT_KEY_LEFT:
         if(--curFrame < 0)
             curFrame = totalFrames-1;
-        apply();
+        apply(data);
         glutPostRedisplay();
         break;
     case GLUT_KEY_UP:
@@ -615,6 +577,73 @@ void init()
     rotY = 170;
     rotX = 35;
 }
+
+
+float *dados;
+void readFrames() {
+    FILE *file = fopen("bvh/Male1_A1_Stand.bvh", "r");
+    if(file == NULL){
+        return NULL;
+    }
+    int linhaSize = 1000;
+    char linha[linhaSize];
+    int frames;
+    float frameTime;
+
+    ///PULA HIERARQUIA:
+    while(strncmp(fgets(linha, linhaSize, file), "MOTION", 6)  != 0) {
+        //printf(linha);
+    }
+
+    ///Pula 'Frames: ' :
+    char aux[8];
+    fscanf(file, "%s",aux);
+
+    ///Armazena quantidade de frames:
+    fscanf(file, "%d",&totalFrames);
+    ///Pula "\n" da linha com numero de frames:
+    fgets(linha, linhaSize, file);
+
+    ///PULA FRAME TIME:
+    fgets(linha, linhaSize, file);
+
+    ///LEITURA DOS FRAMES:
+    dados = (float *) malloc(69 * sizeof(float));
+    float numero;
+    char *retorno;
+    int k=0;
+    int j=0;
+    while(fgets(linha, linhaSize, file) != NULL) {
+        //printf(linha);
+        //if(j=100){return;}
+        j++;
+        k=0;
+        retorno = strtok(linha, " ");
+        do{
+            numero = strtof(retorno, NULL);
+            dados[k] = numero;
+            k++;
+            //printf("%f ", aux);
+        } while(strncmp(  (retorno = strtok('\0', " ")) , "\n", 1) != 0);
+
+        dataPos=0;
+        applyData(dados, root);
+        //glutPostRedisplay();
+        curFrame++;
+
+        //drawSkeleton();
+
+        //glutDisplayFunc ( display );
+        //glutIdleFunc ( display );
+        //display();
+        //for(int i=0; i<69; i++) {
+            //printf("\n%d    %f",i,  dados[i]);
+        //}
+        //printf("\n\n");
+    }
+    fclose(file);
+}
+
 
 // **********************************************************************
 //  Programa principal
@@ -679,4 +708,5 @@ int main (int argc, char** argv)
 
     // inicia o tratamento dos eventos
     glutMainLoop ( );
+
 }
