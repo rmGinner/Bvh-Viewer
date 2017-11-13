@@ -21,12 +21,11 @@
 #include <GL/glut.h>
 #endif
 
-#define OFFSET "OFFSET"
-#define CHANNELS "CHANNELS"
-#define JOINT "JOINT"
-#define END_SITE "End Site"
-#define STRING_BUFFER 100
+#define STRING_BUFFER 20
 #define NODE_DATA_BUFFER 10000
+#define READER_STRING_FORMAT " %s "
+#define READER_FLOAT_FORMAT "%f"
+#define READER_INT_FORMAT "%d"
 
 typedef struct Node Node;
 
@@ -68,7 +67,13 @@ float Obs[3] = {0,0,-500};
 float Alvo[3];
 float ObsIni[3];
 
-char* countChildren(FILE *file, char buffer[], char *nodeData, char nodeName[]);
+Node* readNode(FILE *file, int bytesGetToNodeName, int bytesGetToNodeOffset, int bytesGetToChannels, Node *parent,
+                int numChildren);
+
+void createNodesByStaticMode(FILE *file);
+
+Node* createNode(char name[20], Node* parent, int numChannels, float ofx, float ofy, float ofz, int numChildren);
+
 void convertToTreeStructure()
 {
     FILE *file = fopen("test.bvh", "r");
@@ -80,127 +85,58 @@ void convertToTreeStructure()
         return NULL;
     }
 
-    fseek(file, 16, SEEK_SET);
-    fscanf(file, " %s ", rootName);
-    fgets(buffer, STRING_BUFFER, file);
-    fscanf(file, " %s ", buffer);
-
-    printf("The result is: %s ", countChildren(file, buffer, nodeData, rootName));
+    createNodesByStaticMode(file);
 }
 
-char* countChildren(FILE *file, char buffer[], char *nodeData, char nodeName[]){
-    if(strstr(buffer, "OFFSET")){
-        //Name
-        strcat(nodeData, "Node name: ");
-        strcat(nodeData, nodeName);
-        strcat(nodeData, "##");
+void createNodesByStaticMode(FILE *file){
+    int bytesGetToNodeName = 16;
+    int bytesGetToNodeOffset = 11;
+    int bytesGetToChannels = 13;
 
-        //Offset
-        fscanf(file, " %s ", buffer);
-        strcat(nodeData, "offset:");
-        strcat(nodeData, buffer);
+    root = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, NULL, 1);
 
-        strcat(nodeData, " ");
-        strcat(nodeData, buffer);
+    bytesGetToNodeName = 69;
+    bytesGetToNodeOffset = 14;
+    bytesGetToChannels = 14;
 
-        strcat(nodeData, " ");
-        strcat(nodeData, buffer);
-        strcat(nodeData, "#");
+    Node* toSpine = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, root, 1);
 
-        //Channels
-        fscanf(file, " %s ",buffer);
-        fscanf(file, " %s ",buffer);
-        strcat(nodeData, "Channels:");
-        strcat(nodeData, buffer);
-        strcat(nodeData,"\n");
-        fgets(buffer, STRING_BUFFER, file);
-    }
+    bytesGetToNodeName = 40;
+    bytesGetToNodeOffset = 19;
+    bytesGetToChannels = 16;
 
-    if(strstr(buffer, "}")){
-        fgets(buffer, STRING_BUFFER, file);
-        return nodeData;
-    }
+    Node* spine = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, root, 1);
 
-    if(strstr(buffer, "End")){
-        fgets(buffer, STRING_BUFFER, file);
-        fgets(buffer, STRING_BUFFER, file);
-        fgets(buffer, STRING_BUFFER, file);
-        fgets(buffer, STRING_BUFFER, file);
-
-        return nodeData;
-    }
-
-    if(strstr(buffer, "JOINT")){
-        char childName[STRING_BUFFER];
-        fscanf(file, " %s ", childName);
-        fscanf(file, " %s ", buffer);
-
-        return strcat(countChildren(file, buffer, nodeData, childName), " - ");
-    }
-
+    // 70
 }
 
-//
-//char readTree(FILE *file, char *buffer,char **nodeData, int childrenNumbers){
-//    if(feof(file)){
-//        return;
-//    }
-//
-////    fscanf(file, " %s ", buffer);
-////
-////    if(strstr(buffer,"{")){
-////        strcat(test,"Node name");
-////        return strcat(readTree(file,buffer,test ,1), test);
-////    }
-////
-////    return 0;
-//
-//    if(strstr(buffer, "{") ){
-//        //Offset text
-//        fscanf(file, " %s ", buffer);
-//        //Offset values
-//        fscanf(file, " %s ", buffer);
-//        strcat(nodeData, "Offset: ");
-//        strcat(nodeData, buffer);
-//        strcat(nodeData, " ");
-//        fscanf(file, " %s ", buffer);
-//        strcat(nodeData, buffer);
-//        strcat(nodeData, " ");
-//        fscanf(file, " %s ", buffer);
-//        strcat(nodeData, buffer);
-//        strcat(nodeData, "#");
-//
-//        //Channel text
-//        fscanf(file, " %s ", buffer);
-//        //Channels numbers
-//        fscanf(file, " %s ", buffer);
-//        strcat(nodeData, "Channels: ");
-//        strcat(nodeData, buffer);
-//
-//        //Skip channels info
-//        fgets(buffer, STRING_BUFFER, file);
-//
-//        //Joint or end site text
-//        fscanf(file, " %s ", buffer);
-//
-//        //If is end site, so skip.
-//        if(strstr(buffer, "End")){
-//            fgets(buffer, STRING_BUFFER, file);
-//            fgets(buffer, STRING_BUFFER, file);
-//            fgets(buffer, STRING_BUFFER, file);
-//            fgets(buffer, STRING_BUFFER, file);
-//        }
-//
-//        //Joint name
-//
-//
-//        printf("Current Node is: %s", buffer);
-//        childrenNumbers++;
-//        return readTree(file, buffer, buffer, childrenNumbers);
-//    }
-//}
+Node* readNode(FILE *file, int bytesGetToNodeName, int bytesGetToNodeOffset, int bytesGetToChannels, Node *parent,
+                int numChildren){
 
+    char nome[STRING_BUFFER];
+    float offsetX;
+    float offsetY;
+    float offsetZ;
+    int channels;
 
+    fseek(file, bytesGetToNodeName, SEEK_CUR);
+    fscanf(file, READER_STRING_FORMAT, nome);
+    printf("Name: %s \n", nome);
+
+    fseek(file, bytesGetToNodeOffset, SEEK_CUR);
+    fscanf(file, READER_FLOAT_FORMAT, &offsetX);
+    printf("X: %f \n", offsetX);
+    fscanf(file, READER_FLOAT_FORMAT, &offsetY);
+    printf("Y: %f \n", offsetY);
+    fscanf(file, READER_FLOAT_FORMAT, &offsetZ);
+    printf("Z: %f \n", offsetZ);
+
+    fseek(file, bytesGetToChannels, SEEK_CUR);
+    fscanf(file, READER_INT_FORMAT, &channels);
+    printf("Channels: %d \n\n", channels);
+
+    return createNode(nome, parent, channels, offsetX, offsetY, offsetZ, numChildren);
+}
 
 // **********************************************************************
 //  Cria um nodo novo para a hierarquia, fazendo também a ligacao com
