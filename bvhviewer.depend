@@ -65,3 +65,30 @@
 
 1508543036 c:\users\rodrigo\desktop\bvh-viewer\include\gl\freeglut_ext.h
 
+<<<<<<< HEAD
+=======
+1510849199 source:c:\users\rodrigo.machado\documents\bvh-viewer\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<math.h>
+	<windows.h>
+	"gl/glut.h"
+	<GLUT/glut.h>
+	<GL/glut.h>
+
+1510590606 c:\users\rodrigo.machado\documents\bvh-viewer\include\gl\glut.h
+	"freeglut.h"
+
+1510590606 c:\users\rodrigo.machado\documents\bvh-viewer\include\gl\freeglut.h
+	"freeglut_std.h"
+	"freeglut_ext.h"
+
+1510590606 c:\users\rodrigo.machado\documents\bvh-viewer\include\gl\freeglut_std.h
+	<windows.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1510590606 c:\users\rodrigo.machado\documents\bvh-viewer\include\gl\freeglut_ext.h
+
+>>>>>>> 0f05604... Tentativa de leitura da estrutura

@@ -87,6 +87,7 @@ void convertToTreeStructure()
 
     createNodesByStaticMode(file);
 }
+<<<<<<< HEAD
 
 void createNodesByStaticMode(FILE *file){
     int bytesGetToNodeName = 16;
@@ -119,6 +120,52 @@ Node* readNode(FILE *file, int bytesGetToNodeName, int bytesGetToNodeOffset, int
     float offsetZ;
     int channels;
 
+=======
+
+void createNodesByStaticMode(FILE *file){
+    int bytesGetToNodeName = 16;
+    int bytesGetToNodeOffset = 11;
+    int bytesGetToChannels = 13;
+
+    root = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, NULL, 1);
+
+    bytesGetToNodeName = 69;
+    bytesGetToNodeOffset = 13;
+    bytesGetToChannels = 14;
+
+    Node* toSpine = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, root, 1);
+
+    bytesGetToNodeName = 41;
+    bytesGetToNodeOffset = 16;
+    bytesGetToChannels = 16;
+
+    Node* spine = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, root, 1);
+
+    bytesGetToNodeName = 43;
+    bytesGetToNodeOffset = 18;
+    bytesGetToChannels = 18;
+
+    Node* spine1 = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, root, 1);
+
+    bytesGetToNodeName = 45;
+    bytesGetToNodeOffset = 20;
+    bytesGetToChannels = 20;
+
+    Node* neck = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, root, 1);
+
+    // 70
+}
+
+Node* readNode(FILE *file, int bytesGetToNodeName, int bytesGetToNodeOffset, int bytesGetToChannels, Node *parent,
+                int numChildren){
+
+    char nome[STRING_BUFFER];
+    float offsetX;
+    float offsetY;
+    float offsetZ;
+    int channels;
+
+>>>>>>> 0f05604... Tentativa de leitura da estrutura
     fseek(file, bytesGetToNodeName, SEEK_CUR);
     fscanf(file, READER_STRING_FORMAT, nome);
     printf("Name: %s \n", nome);
