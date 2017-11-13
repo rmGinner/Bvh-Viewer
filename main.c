@@ -22,6 +22,7 @@
 #endif
 
 #define STRING_BUFFER 20
+#define STRING_AUX_BUFFER 500
 #define NODE_DATA_BUFFER 10000
 #define READER_STRING_FORMAT " %s "
 #define READER_FLOAT_FORMAT "%f"
@@ -86,28 +87,182 @@ void convertToTreeStructure()
     }
 
     createNodesByStaticMode(file);
-}
 
+    apply();
+}
 void createNodesByStaticMode(FILE *file){
     int bytesGetToNodeName = 16;
     int bytesGetToNodeOffset = 11;
     int bytesGetToChannels = 13;
+    char buffer[STRING_AUX_BUFFER];
 
-    root = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, NULL, 1);
+    root = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, NULL, 3);
 
     bytesGetToNodeName = 69;
-    bytesGetToNodeOffset = 14;
+    bytesGetToNodeOffset = 13;
     bytesGetToChannels = 14;
 
     Node* toSpine = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, root, 1);
 
-    bytesGetToNodeName = 40;
-    bytesGetToNodeOffset = 19;
+    bytesGetToNodeName = 41;
+    bytesGetToNodeOffset = 16;
     bytesGetToChannels = 16;
 
-    Node* spine = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, root, 1);
+    Node* spine = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, toSpine, 1);
 
-    // 70
+    bytesGetToNodeName = 43;
+    bytesGetToNodeOffset = 18;
+    bytesGetToChannels = 18;
+
+    Node* spine1 = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, spine, 3);
+
+    bytesGetToNodeName = 45;
+    bytesGetToNodeOffset = 20;
+    bytesGetToChannels = 20;
+
+    Node* neck = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, spine1, 1);
+
+    bytesGetToNodeName = 47;
+    bytesGetToNodeOffset = 22;
+    bytesGetToChannels = 20;
+
+    Node* head = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, neck, 0);
+
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+
+    bytesGetToNodeName = 14;
+    bytesGetToNodeOffset = 20;
+    bytesGetToChannels = 20;
+
+    Node* leftShoulder = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, spine1, 1);
+
+    bytesGetToNodeName = 47;
+    bytesGetToNodeOffset = 22;
+    bytesGetToChannels = 22;
+
+    Node* leftArm = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, leftShoulder, 1);
+
+    bytesGetToNodeName = 49;
+    bytesGetToNodeOffset = 24;
+    bytesGetToChannels = 24;
+
+    Node* leftForeArm = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, leftArm, 1);
+
+    bytesGetToNodeName = 51;
+    bytesGetToNodeOffset = 26;
+    bytesGetToChannels = 26;
+
+    Node* leftHand = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, leftForeArm, 0);
+
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+
+    bytesGetToNodeName = 14;
+    bytesGetToNodeOffset = 20;
+    bytesGetToChannels = 20;
+
+    Node* rightShoulder = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, spine1, 1);
+
+    bytesGetToNodeName = 47;
+    bytesGetToNodeOffset = 22;
+    bytesGetToChannels = 22;
+
+    Node* rightArm = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, rightShoulder, 1);
+
+    bytesGetToNodeName = 49;
+    bytesGetToNodeOffset = 24;
+    bytesGetToChannels = 24;
+
+    Node* rightForeArm = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, rightArm, 1);
+
+    bytesGetToNodeName = 51;
+    bytesGetToNodeOffset = 26;
+    bytesGetToChannels = 26;
+
+    Node* rightHand = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, rightForeArm, 0);
+
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+
+    bytesGetToNodeName = 13;
+    bytesGetToNodeOffset = 13;
+    bytesGetToChannels = 14;
+
+    Node* leftUpLeg = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, root, 1);
+
+    bytesGetToNodeName = 41;
+    bytesGetToNodeOffset = 16;
+    bytesGetToChannels = 16;
+
+    Node* leftLeg = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, leftUpLeg, 1);
+
+    bytesGetToNodeName = 43;
+    bytesGetToNodeOffset = 17;
+    bytesGetToChannels = 18;
+
+    Node* leftFoot = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, leftLeg, 1);
+
+    bytesGetToNodeName = 45;
+    bytesGetToNodeOffset = 19;
+    bytesGetToChannels = 20;
+
+    Node* leftToeBase = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, leftFoot, 0);
+
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+    fgets(buffer, STRING_AUX_BUFFER, file);
+
+    bytesGetToNodeName = 8;
+    bytesGetToNodeOffset = 13;
+    bytesGetToChannels = 14;
+
+    Node* rightUpLeg = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, root, 1);
+
+    bytesGetToNodeName = 41;
+    bytesGetToNodeOffset = 16;
+    bytesGetToChannels = 16;
+
+    Node* rightLeg = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, rightUpLeg, 1);
+
+    bytesGetToNodeName = 43;
+    bytesGetToNodeOffset = 17;
+    bytesGetToChannels = 18;
+
+    Node* rightFoot = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, rightLeg, 1);
+
+    bytesGetToNodeName = 45;
+    bytesGetToNodeOffset = 19;
+    bytesGetToChannels = 20;
+
+    Node* rightToeBase = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, rightFoot, 0);
 }
 
 Node* readNode(FILE *file, int bytesGetToNodeName, int bytesGetToNodeOffset, int bytesGetToChannels, Node *parent,
@@ -622,9 +777,8 @@ void init()
 // **********************************************************************
 int main (int argc, char** argv)
 {
-    convertToTreeStructure();
+    //convertToTreeStructure();
 
-    return 0;
     glutInit            ( &argc, argv );
     glutInitDisplayMode (GLUT_DOUBLE | GLUT_DEPTH | GLUT_RGB );
     glutInitWindowPosition (0,0);
@@ -641,7 +795,9 @@ int main (int argc, char** argv)
 
     // Exemplo: monta manualmente um esqueleto
     // (no trabalho, deve-se ler do arquivo)
-    initMaleSkel();
+    //initMaleSkel();
+
+    convertToTreeStructure();
 
     // Define que o tratador de evento para
     // o redesenho da tela. A funcao "display"
