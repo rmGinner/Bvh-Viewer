@@ -21,13 +21,15 @@
 #include <GL/glut.h>
 #endif
 
+<<<<<<< HEAD
+=======
 #define OFFSET "OFFSET"
 #define CHANNELS "CHANNELS"
 #define JOINT "JOINT"
 #define END_SITE "End Site"
 #define STRING_BUFFER 100
-#define NODE_DATA_BUFFER 10000
 
+>>>>>>> b1d4fd493d09808cd37537c6e5416ac2c712a37d
 typedef struct Node Node;
 
 struct Node {
@@ -53,9 +55,6 @@ int curFrame = 0;
 void freeTree();
 void freeNode(Node* node);
 
-//custom home work
-void convertToTreeStructure();
-
 // Variaveis globais para manipulacao da visualizacao 3D
 int width,height;
 float deltax=0, deltay=0;
@@ -68,140 +67,40 @@ float Obs[3] = {0,0,-500};
 float Alvo[3];
 float ObsIni[3];
 
-char* countChildren(FILE *file, char buffer[], char *nodeData, char nodeName[]);
+<<<<<<< HEAD
+=======
+void convertToTreeStructure();
+
 void convertToTreeStructure()
 {
-    FILE *file = fopen("test.bvh", "r");
-    char buffer[STRING_BUFFER];
-    char rootName[NODE_DATA_BUFFER];
-    char *nodeData = malloc(5000);
+    FILE *file = fopen("bvh/Male1_A1_Stand.bvh", "r");
 
     if(file == NULL){
         return NULL;
     }
 
-    fseek(file, 16, SEEK_SET);
-    fscanf(file, " %s ", rootName);
-    fgets(buffer, STRING_BUFFER, file);
-    fscanf(file, " %s ", buffer);
+    char buffer[STRING_BUFFER];
 
-    printf("The result is: %s ", countChildren(file, buffer, nodeData, rootName));
-}
+    fscanf(file," %s ", buffer);
+    fscanf(file," %s ", buffer);
+    fscanf(file," %s ", buffer);
 
-char* countChildren(FILE *file, char buffer[], char *nodeData, char nodeName[]){
-    if(strstr(buffer, "OFFSET")){
-        //Name
-        strcat(nodeData, "Node name: ");
-        strcat(nodeData, nodeName);
-        strcat(nodeData, "##");
+    char nodeName[20];
+    //createNode(strcpy(nodeName,buffer), NULL, )
 
-        //Offset
-        fscanf(file, " %s ", buffer);
-        strcat(nodeData, "offset:");
-        strcat(nodeData, buffer);
 
-        strcat(nodeData, " ");
-        strcat(nodeData, buffer);
+    printf("%s\n",buffer);
 
-        strcat(nodeData, " ");
-        strcat(nodeData, buffer);
-        strcat(nodeData, "#");
+    printf("%s\n",buffer);
 
-        //Channels
-        fscanf(file, " %s ",buffer);
-        fscanf(file, " %s ",buffer);
-        strcat(nodeData, "Channels:");
-        strcat(nodeData, buffer);
-        strcat(nodeData,"\n");
-        fgets(buffer, STRING_BUFFER, file);
-    }
 
-    if(strstr(buffer, "}")){
-        fgets(buffer, STRING_BUFFER, file);
-        return nodeData;
-    }
 
-    if(strstr(buffer, "End")){
-        fgets(buffer, STRING_BUFFER, file);
-        fgets(buffer, STRING_BUFFER, file);
-        fgets(buffer, STRING_BUFFER, file);
-        fgets(buffer, STRING_BUFFER, file);
-
-        return nodeData;
-    }
-
-    if(strstr(buffer, "JOINT")){
-        char childName[STRING_BUFFER];
-        fscanf(file, " %s ", childName);
-        fscanf(file, " %s ", buffer);
-
-        return strcat(countChildren(file, buffer, nodeData, childName), " - ");
-    }
 
 }
 
-//
-//char readTree(FILE *file, char *buffer,char **nodeData, int childrenNumbers){
-//    if(feof(file)){
-//        return;
-//    }
-//
-////    fscanf(file, " %s ", buffer);
-////
-////    if(strstr(buffer,"{")){
-////        strcat(test,"Node name");
-////        return strcat(readTree(file,buffer,test ,1), test);
-////    }
-////
-////    return 0;
-//
-//    if(strstr(buffer, "{") ){
-//        //Offset text
-//        fscanf(file, " %s ", buffer);
-//        //Offset values
-//        fscanf(file, " %s ", buffer);
-//        strcat(nodeData, "Offset: ");
-//        strcat(nodeData, buffer);
-//        strcat(nodeData, " ");
-//        fscanf(file, " %s ", buffer);
-//        strcat(nodeData, buffer);
-//        strcat(nodeData, " ");
-//        fscanf(file, " %s ", buffer);
-//        strcat(nodeData, buffer);
-//        strcat(nodeData, "#");
-//
-//        //Channel text
-//        fscanf(file, " %s ", buffer);
-//        //Channels numbers
-//        fscanf(file, " %s ", buffer);
-//        strcat(nodeData, "Channels: ");
-//        strcat(nodeData, buffer);
-//
-//        //Skip channels info
-//        fgets(buffer, STRING_BUFFER, file);
-//
-//        //Joint or end site text
-//        fscanf(file, " %s ", buffer);
-//
-//        //If is end site, so skip.
-//        if(strstr(buffer, "End")){
-//            fgets(buffer, STRING_BUFFER, file);
-//            fgets(buffer, STRING_BUFFER, file);
-//            fgets(buffer, STRING_BUFFER, file);
-//            fgets(buffer, STRING_BUFFER, file);
-//        }
-//
-//        //Joint name
-//
-//
-//        printf("Current Node is: %s", buffer);
-//        childrenNumbers++;
-//        return readTree(file, buffer, buffer, childrenNumbers);
-//    }
-//}
 
 
-
+>>>>>>> b1d4fd493d09808cd37537c6e5416ac2c712a37d
 // **********************************************************************
 //  Cria um nodo novo para a hierarquia, fazendo também a ligacao com
 //  o seu pai (se houver)
@@ -685,10 +584,15 @@ void init()
 //  Programa principal
 // **********************************************************************
 int main (int argc, char** argv)
+<<<<<<< HEAD
+{
+=======
 {
     convertToTreeStructure();
 
     return 0;
+
+>>>>>>> b1d4fd493d09808cd37537c6e5416ac2c712a37d
     glutInit            ( &argc, argv );
     glutInitDisplayMode (GLUT_DOUBLE | GLUT_DEPTH | GLUT_RGB );
     glutInitWindowPosition (0,0);

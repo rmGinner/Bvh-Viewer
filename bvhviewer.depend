@@ -41,3 +41,27 @@
 
 1509746786 c:\users\16204179\desktop\bvhviewer-base\include\gl\freeglut_ext.h
 
+1510537571 source:c:\users\rodrigo\desktop\bvh-viewer\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<math.h>
+	<windows.h>
+	"gl/glut.h"
+	<GLUT/glut.h>
+	<GL/glut.h>
+
+1508543036 c:\users\rodrigo\desktop\bvh-viewer\include\gl\glut.h
+	"freeglut.h"
+
+1508543036 c:\users\rodrigo\desktop\bvh-viewer\include\gl\freeglut.h
+	"freeglut_std.h"
+	"freeglut_ext.h"
+
+1508543036 c:\users\rodrigo\desktop\bvh-viewer\include\gl\freeglut_std.h
+	<windows.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1508543036 c:\users\rodrigo\desktop\bvh-viewer\include\gl\freeglut_ext.h
+
