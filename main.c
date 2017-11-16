@@ -27,6 +27,8 @@
 #define END_SITE "End Site"
 #define STRING_BUFFER 100
 
+#define LINHA_BUFFER 1000
+#define FRAMES_POR_LINHA 69
 typedef struct Node Node;
 
 struct Node {
@@ -587,10 +589,10 @@ void readFrames() {
     if(file == NULL){
         return NULL;
     }
-    int linhaSize = 1000;
-    char linha[linhaSize];
+
+    char linha[LINHA_BUFFER];
     ///PULA HIERARQUIA:
-    while(strncmp(fgets(linha, linhaSize, file), "MOTION", 6)  != 0) {
+    while(strncmp(fgets(linha, LINHA_BUFFER, file), "MOTION", 6)  != 0) {
         //printf(linha);
     }
 
@@ -601,17 +603,17 @@ void readFrames() {
     ///Armazena quantidade de frames:
     fscanf(file, "%d",&totalFrames);
     ///Pula "\n" da linha com numero de frames:
-    fgets(linha, linhaSize, file);
+    fgets(linha, LINHA_BUFFER, file);
 
     ///PULA FRAME TIME:
-    fgets(linha, linhaSize, file);
+    fgets(linha, LINHA_BUFFER, file);
 
     ///LEITURA DOS FRAMES:
     ///Alocando matriz:
     dados = (float**) malloc(totalFrames * sizeof(float*));
     for(int i=0; i<totalFrames; i++) {
-        dados[i] = (float *) malloc(69 * sizeof(float));
-        for(int j=0; j<69; j++) {
+        dados[i] = (float *) malloc(FRAMES_POR_LINHA * sizeof(float));
+        for(int j=0; j<FRAMES_POR_LINHA; j++) {
             dados[i][j] = 0;
         }
     }
@@ -620,7 +622,7 @@ void readFrames() {
     char *retorno;
     int k=0;
     int j=0;
-    while(fgets(linha, linhaSize, file) != NULL) {
+    while(fgets(linha, LINHA_BUFFER, file) != NULL) {
         //printf(linha);
         //if(j=100){return;}
         k=0;
