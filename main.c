@@ -131,11 +131,14 @@ void createNodesByStaticMode(FILE *file){
     bytesGetToNodeOffset = 22;
     bytesGetToChannels = 20;
 
-    Node* head = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, neck, 0);
+    Node* head = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, neck, 1);
 
-    fgets(buffer, STRING_AUX_BUFFER, file);
-    fgets(buffer, STRING_AUX_BUFFER, file);
-    fgets(buffer, STRING_AUX_BUFFER, file);
+    bytesGetToNodeName = 52;
+    bytesGetToNodeOffset = 24;
+    bytesGetToChannels = 20;
+
+    Node* top = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, head, 0);
+
     fgets(buffer, STRING_AUX_BUFFER, file);
     fgets(buffer, STRING_AUX_BUFFER, file);
     fgets(buffer, STRING_AUX_BUFFER, file);
@@ -163,11 +166,14 @@ void createNodesByStaticMode(FILE *file){
     bytesGetToNodeOffset = 26;
     bytesGetToChannels = 26;
 
-    Node* leftHand = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, leftForeArm, 0);
+    Node* leftHand = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, leftForeArm, 1);
 
-    fgets(buffer, STRING_AUX_BUFFER, file);
-    fgets(buffer, STRING_AUX_BUFFER, file);
-    fgets(buffer, STRING_AUX_BUFFER, file);
+    bytesGetToNodeName = 52;
+    bytesGetToNodeOffset = 28;
+    bytesGetToChannels = 0;
+
+    Node* topHand = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, leftHand, 0);
+
     fgets(buffer, STRING_AUX_BUFFER, file);
     fgets(buffer, STRING_AUX_BUFFER, file);
     fgets(buffer, STRING_AUX_BUFFER, file);
@@ -197,12 +203,14 @@ void createNodesByStaticMode(FILE *file){
     bytesGetToNodeOffset = 26;
     bytesGetToChannels = 26;
 
-    Node* rightHand = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, rightForeArm, 0);
+    Node* rightHand = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, rightForeArm, 1);
 
-    fgets(buffer, STRING_AUX_BUFFER, file);
-    fgets(buffer, STRING_AUX_BUFFER, file);
-    fgets(buffer, STRING_AUX_BUFFER, file);
-    fgets(buffer, STRING_AUX_BUFFER, file);
+    bytesGetToNodeName = 52;
+    bytesGetToNodeOffset = 44;
+    bytesGetToChannels = 0;
+
+    Node* topRightHand = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, rightHand, 0);
+
     fgets(buffer, STRING_AUX_BUFFER, file);
     fgets(buffer, STRING_AUX_BUFFER, file);
     fgets(buffer, STRING_AUX_BUFFER, file);
@@ -233,11 +241,14 @@ void createNodesByStaticMode(FILE *file){
     bytesGetToNodeOffset = 19;
     bytesGetToChannels = 20;
 
-    Node* leftToeBase = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, leftFoot, 0);
+    Node* leftToeBase = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, leftFoot, 1);
 
-    fgets(buffer, STRING_AUX_BUFFER, file);
-    fgets(buffer, STRING_AUX_BUFFER, file);
-    fgets(buffer, STRING_AUX_BUFFER, file);
+    bytesGetToNodeName = 45;
+    bytesGetToNodeOffset = 19;
+    bytesGetToChannels = 0;
+
+    Node* topLeftToeBase = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, leftToeBase, 0);
+
     fgets(buffer, STRING_AUX_BUFFER, file);
     fgets(buffer, STRING_AUX_BUFFER, file);
     fgets(buffer, STRING_AUX_BUFFER, file);
@@ -267,7 +278,13 @@ void createNodesByStaticMode(FILE *file){
     bytesGetToNodeOffset = 19;
     bytesGetToChannels = 20;
 
-    Node* rightToeBase = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, rightFoot, 0);
+    Node* rightToeBase = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, rightFoot, 1);
+
+    bytesGetToNodeName = 45;
+    bytesGetToNodeOffset = 19;
+    bytesGetToChannels = 0;
+
+    Node* lastRightToeBase = readNode(file, bytesGetToNodeName, bytesGetToNodeOffset, bytesGetToChannels, rightToeBase, 0);
 }
 
 Node* readNode(FILE *file, int bytesGetToNodeName, int bytesGetToNodeOffset, int bytesGetToChannels, Node *parent,
@@ -291,9 +308,13 @@ Node* readNode(FILE *file, int bytesGetToNodeName, int bytesGetToNodeOffset, int
     fscanf(file, READER_FLOAT_FORMAT, &offsetZ);
     printf("Z: %f \n", offsetZ);
 
-    fseek(file, bytesGetToChannels, SEEK_CUR);
-    fscanf(file, READER_INT_FORMAT, &channels);
-    printf("Channels: %d \n\n", channels);
+     if(strstr(nome, "Site")){
+        channels = 3;
+    }else{
+        fseek(file, bytesGetToChannels, SEEK_CUR);
+        fscanf(file, READER_INT_FORMAT, &channels);
+        printf("Channels: %d \n\n", channels);
+    }
 
     return createNode(nome, parent, channels, offsetX, offsetY, offsetZ, numChildren);
 }
