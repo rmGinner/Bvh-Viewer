@@ -28,6 +28,8 @@
 #define READER_FLOAT_FORMAT "%f"
 #define READER_INT_FORMAT "%d"
 
+#define LINHA_BUFFER 1000
+#define FRAMES_POR_LINHA 69
 typedef struct Node Node;
 
 struct Node {
@@ -48,6 +50,9 @@ int totalFrames;
 
 // Frame atual
 int curFrame = 0;
+
+//MATRIZ COM OS FRAMES
+float **dados;
 
 // Funcoes para liberacao de memoria da hierarquia
 void freeTree();
@@ -88,7 +93,6 @@ void convertToTreeStructure()
     }
 
     createNodesByStaticMode(file);
-    apply();
     readFrames();
 }
 void createNodesByStaticMode(FILE *file){
@@ -345,14 +349,14 @@ float data[] = { -326.552, 98.7701, 317.634, 71.4085, 60.8487, 17.2406, -70.1915
 // Pos. da aplicacao dos dados
 int dataPos;
 
-void applyData(float data[], Node* n)
+void applyData(float **data, Node* n)
 {
     //printf("%s:\n", n->name);
     if(n->numChildren == 0)
         return;
     for(int c=0; c<n->channels; c++) {
         //printf("   %d -> %f\n", c, data[dataPos]);
-        n->channelData[c] = data[dataPos++];
+        n->channelData[c] = data[curFrame][dataPos++];
     }
     for(int i=0; i<n->numChildren; i++)
         if(n->children[i])
@@ -362,7 +366,7 @@ void applyData(float data[], Node* n)
 void apply()
 {
     dataPos = 0;
-    applyData(data, root);
+    applyData(dados, root);
 }
 
 void initMaleSkel()
@@ -729,7 +733,7 @@ void arrow_keys ( int a_keys, int x, int y )
     case GLUT_KEY_LEFT:
         if(--curFrame < 0)
             curFrame = totalFrames-1;
-        apply(data);
+        apply();
         glutPostRedisplay();
         break;
     case GLUT_KEY_UP:
@@ -779,19 +783,15 @@ void init()
 }
 
 
-float *dados;
 void readFrames() {
-    FILE *file = fopen("bvh/Male1_A1_Stand.bvh", "r");
+    FILE *file = fopen("bvh/Male1_C03_Run.bvh", "r");
     if(file == NULL){
         return NULL;
     }
-    int linhaSize = 1000;
-    char linha[linhaSize];
-    int frames;
-    float frameTime;
 
+    char linha[LINHA_BUFFER];
     ///PULA HIERARQUIA:
-    while(strncmp(fgets(linha, linhaSize, file), "MOTION", 6)  != 0) {
+    while(strncmp(fgets(linha, LINHA_BUFFER, file), "MOTION", 6)  != 0) {
         //printf(linha);
     }
 
@@ -802,45 +802,39 @@ void readFrames() {
     ///Armazena quantidade de frames:
     fscanf(file, "%d",&totalFrames);
     ///Pula "\n" da linha com numero de frames:
-    fgets(linha, linhaSize, file);
+    fgets(linha, LINHA_BUFFER, file);
 
     ///PULA FRAME TIME:
-    fgets(linha, linhaSize, file);
+    fgets(linha, LINHA_BUFFER, file);
 
     ///LEITURA DOS FRAMES:
-    dados = (float *) malloc(69 * sizeof(float));
+    ///Alocando matriz:
+    dados = (float**) malloc(totalFrames * sizeof(float*));
+    for(int i=0; i<totalFrames; i++) {
+        dados[i] = (float *) malloc(FRAMES_POR_LINHA * sizeof(float));
+        for(int j=0; j<FRAMES_POR_LINHA; j++) {
+            dados[i][j] = 0;
+        }
+    }
+
     float numero;
     char *retorno;
     int k=0;
     int j=0;
-    while(fgets(linha, linhaSize, file) != NULL) {
+    while(fgets(linha, LINHA_BUFFER, file) != NULL) {
         //printf(linha);
         //if(j=100){return;}
-        j++;
         k=0;
         retorno = strtok(linha, " ");
         do{
             numero = strtof(retorno, NULL);
-            dados[k] = numero;
+            dados[j][k] = numero;
             k++;
             //printf("%f ", aux);
         } while(strncmp(  (retorno = strtok('\0', " ")) , "\n", 1) != 0);
-
-        dataPos=0;
-        applyData(dados, root);
-        //glutPostRedisplay();
-        curFrame++;
-
-        //drawSkeleton();
-
-        //glutDisplayFunc ( display );
-        //glutIdleFunc ( display );
-        //display();
-        //for(int i=0; i<69; i++) {
-            //printf("\n%d    %f",i,  dados[i]);
-        //}
-        //printf("\n\n");
+        j++;
     }
+    apply();
     fclose(file);
 }
 
