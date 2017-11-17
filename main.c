@@ -88,8 +88,8 @@ void convertToTreeStructure()
     }
 
     createNodesByStaticMode(file);
-
     apply();
+    readFrames();
 }
 void createNodesByStaticMode(FILE *file){
     int bytesGetToNodeName = 16;
@@ -403,8 +403,8 @@ void initMaleSkel()
     Node* rToe = createNode("RToe", rFoot, 3, -0.0828122, -6.13587, 12.8035, 1);
     Node* rToe2 = createNode("RToe2", rToe, 3, -0.131328, -1.35082, 5.13018, 0);
 
-    //apply();
-    readFrames();
+    apply();
+
 }
 
 
@@ -866,7 +866,8 @@ int main (int argc, char** argv)
 
     // Exemplo: monta manualmente um esqueleto
     // (no trabalho, deve-se ler do arquivo)
-    initMaleSkel();
+    //initMaleSkel();
+    convertToTreeStructure();
 
     // Define que o tratador de evento para
     // o redesenho da tela. A funcao "display"
