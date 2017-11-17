@@ -59,8 +59,9 @@ void freeTree();
 void freeNode(Node* node);
 
 //custom home work
-void convertToTreeStructure();
-void readFrames();
+void menu();
+void convertToTreeStructure(char nome[]);
+void readFrames(FILE* file);
 
 // Variaveis globais para manipulacao da visualizacao 3D
 int width,height;
@@ -81,9 +82,21 @@ void createNodesByStaticMode(FILE *file);
 
 Node* createNode(char name[20], Node* parent, int numChannels, float ofx, float ofy, float ofz, int numChildren);
 
-void convertToTreeStructure()
+
+void menu() {
+    printf("Digite o nome do arquivo:\n");
+    char nome[60];
+    char dir[22] = "bvh/";
+    scanf("%s", &nome);
+    strcat(dir, nome);
+    printf(dir);
+    convertToTreeStructure(dir);
+}
+
+
+void convertToTreeStructure(char nome[])
 {
-    FILE *file = fopen("test.bvh", "r");
+    FILE *file = fopen(nome, "r");
     char buffer[STRING_BUFFER];
     char rootName[NODE_DATA_BUFFER];
     char *nodeData = malloc(5000);
@@ -93,7 +106,7 @@ void convertToTreeStructure()
     }
 
     createNodesByStaticMode(file);
-    readFrames();
+    readFrames(file);
 }
 void createNodesByStaticMode(FILE *file){
     int bytesGetToNodeName = 16;
@@ -804,12 +817,7 @@ void init()
 }
 
 
-void readFrames() {
-    FILE *file = fopen("bvh/Male1_C03_Run.bvh", "r");
-    if(file == NULL){
-        return NULL;
-    }
-
+void readFrames(FILE *file) {
     char linha[LINHA_BUFFER];
     ///PULA HIERARQUIA:
     while(strncmp(fgets(linha, LINHA_BUFFER, file), "MOTION", 6)  != 0) {
@@ -872,6 +880,10 @@ int main (int argc, char** argv)
     // Define o tamanho inicial da janela grafica do programa
     glutInitWindowSize  (650, 500);
 
+
+    menu();
+
+
     // Cria a janela na tela, definindo o nome da
     // que aparecera na barra de título da janela.
     glutCreateWindow ("BVH Viewer" );
@@ -882,7 +894,7 @@ int main (int argc, char** argv)
     // Exemplo: monta manualmente um esqueleto
     // (no trabalho, deve-se ler do arquivo)
     //initMaleSkel();
-    convertToTreeStructure();
+
 
     // Define que o tratador de evento para
     // o redesenho da tela. A funcao "display"
