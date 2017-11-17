@@ -80,3 +80,27 @@
 
 1510590606 c:\users\rodrigo.machado\documents\bvh-viewer\include\gl\freeglut_ext.h
 
+1510431001 source:d:\carlos andré\faculdade\3º semestre\software básico\bvh-viewer\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<math.h>
+	<windows.h>
+	"gl/glut.h"
+	<GLUT/glut.h>
+	<GL/glut.h>
+
+1509127444 d:\carlos andré\faculdade\3º semestre\software básico\bvh-viewer\include\gl\glut.h
+	"freeglut.h"
+
+1509127444 d:\carlos andré\faculdade\3º semestre\software básico\bvh-viewer\include\gl\freeglut.h
+	"freeglut_std.h"
+	"freeglut_ext.h"
+
+1509127444 d:\carlos andré\faculdade\3º semestre\software básico\bvh-viewer\include\gl\freeglut_std.h
+	<windows.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1509127444 d:\carlos andré\faculdade\3º semestre\software básico\bvh-viewer\include\gl\freeglut_ext.h
+
